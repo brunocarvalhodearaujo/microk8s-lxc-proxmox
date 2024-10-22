@@ -140,3 +140,9 @@ variable "add_cluster_nodes" {
   type        = list(string)
   default     = []
 }
+
+variable "tags" {
+  description = "The tags to assign to the Kubernetes cluster nodes."
+  type        = list(string)
+  default     = []
+}

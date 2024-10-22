@@ -13,6 +13,7 @@ resource "proxmox_lxc" "microk8s" {
   cores           = var.resources.cores
   memory          = var.resources.memory
   onboot          = true
+  tags            = join(";", var.tags)
   ssh_public_keys = join("\n", concat([tls_private_key.private_key.public_key_openssh], var.ssh_public_keys))
   description     = <<-EOT
     ## Description
