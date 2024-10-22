@@ -69,6 +69,133 @@ No modules.
 
 <!--- END_TF_DOCS --->
 
+## Examples
+
+### Single Node
+
+````hcl
+module "microk8s_master_node" {
+  source      = "./modules/k8s"
+  target_node = "b550m"
+  vmid        = 402
+  node_name   = "microk8s-master"
+  ssh_public_keys = [
+    var.public_key_openssh,
+  ]
+  cluster_addons = {
+    ingress = true
+    argocd = {
+      admin_password = "loremipsum"
+      enabled        = true
+      ingress_host   = "argocd.example.com"
+    }
+  }
+  resources = {
+    cores  = 4
+    memory = 4096
+  }
+  rootfs = {
+    storage = "local-lvm"
+    size    = "80G"
+  }
+  proxmox_ssh = {
+    host     = var.proxmox_host
+    username = var.proxmox_username
+    password = var.proxmox_password
+  }
+  network = {
+    name   = "eth0"
+    bridge = "vmbr0"
+    ip6    = "dhcp"
+    gw     = "192.168.1.1"
+    ip     = "192.168.1.50/24"
+  }
+}
+````
+
+### Multi Node
+
+````hcl
+resource "tls_private_key" "private_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+module "microk8s_worker_node" {
+  source      = "./modules/k8s"
+  target_node = "b550m"
+  vmid        = 403
+  node_name   = "microk8s-worker"
+  ssh_public_keys = [
+    tls_private_key.private_key.public_key_openssh
+  ]
+  resources = {
+    cores  = 4
+    memory = 4096
+  }
+  rootfs = {
+    storage = "local-lvm"
+    size    = "80G"
+  }
+  proxmox_ssh = {
+    host     = var.proxmox_host
+    username = var.proxmox_username
+    password = var.proxmox_password
+  }
+  network = {
+    name   = "eth0"
+    bridge = "vmbr0"
+    ip6    = "dhcp"
+    gw     = "192.168.1.1"
+    ip     = "192.168.1.51/24"
+  }
+}
+
+module "microk8s_master_node" {
+  source      = "./modules/k8s"
+  target_node = "b550m"
+  vmid        = 402
+  node_name   = "microk8s-master"
+  ssh_public_keys = [
+    tls_private_key.private_key.public_key_openssh
+  ]
+  cluster_addons = {
+    ingress = true
+    argocd = {
+      admin_password = "loremipsum"
+      enabled        = true
+      ingress_host   = "argocd.example.com"
+    }
+  }
+  resources = {
+    cores  = 4
+    memory = 8192
+  }
+  rootfs = {
+    storage = "local-lvm"
+    size    = "80G"
+  }
+  proxmox_ssh = {
+    host     = var.proxmox_host
+    username = var.proxmox_username
+    password = var.proxmox_password
+  }
+  add_cluster_nodes = [
+    nonsensitive(module.microk8s_worker_node.add_node_token)
+  ]
+  network = {
+    name   = "eth0"
+    bridge = "vmbr0"
+    ip6    = "dhcp"
+    gw     = "192.168.1.1"
+    ip     = "192.168.1.50/24"
+  }
+  depends_on = [
+    module.microk8s_worker_node
+  ]
+}
+````
+
 ## References
 
 - [automated kubernetes proxmox](https://github.com/matthieuml/automated-kubernetes-proxmox/blob/main/proxmox/deploy.sh)
