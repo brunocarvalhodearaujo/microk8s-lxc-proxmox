@@ -80,6 +80,7 @@ module "microk8s_master_node" {
   target_node = "b550m"
   vmid        = 402
   node_name   = "microk8s-master"
+  ostemplate  = "local:vztmpl/ubuntu-23.10-standard_23.10-1_amd64.tar.zst"
   ssh_public_keys = [
     var.public_key_openssh,
   ]
@@ -127,6 +128,7 @@ module "microk8s_worker_node" {
   target_node = "b550m"
   vmid        = 403
   node_name   = "microk8s-worker"
+  ostemplate  = "local:vztmpl/ubuntu-23.10-standard_23.10-1_amd64.tar.zst"
   ssh_public_keys = [
     tls_private_key.private_key.public_key_openssh
   ]
@@ -157,6 +159,7 @@ module "microk8s_master_node" {
   target_node = "b550m"
   vmid        = 402
   node_name   = "microk8s-master"
+  ostemplate  = "local:vztmpl/ubuntu-23.10-standard_23.10-1_amd64.tar.zst"
   ssh_public_keys = [
     tls_private_key.private_key.public_key_openssh
   ]
