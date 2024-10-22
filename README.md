@@ -54,6 +54,7 @@ No modules.
 | <a name="input_resources"></a> [resources](#input\_resources) | The resources to allocate to the Kubernetes cluster nodes. | <pre>object({<br>    cores  = number<br>    memory = number<br>  })</pre> | <pre>{<br>  "cores": 4,<br>  "memory": 8192<br>}</pre> | no |
 | <a name="input_rootfs"></a> [rootfs](#input\_rootfs) | The root filesystem configuration for the Kubernetes cluster nodes. | <pre>object({<br>    storage = string<br>    size    = string<br>  })</pre> | <pre>{<br>  "size": "80G",<br>  "storage": "local-lvm"<br>}</pre> | no |
 | <a name="input_ssh_public_keys"></a> [ssh\_public\_keys](#input\_ssh\_public\_keys) | The SSH public keys to add to the Kubernetes cluster nodes. | `list(string)` | n/a | yes |
+| <a name="input_tags"></a> [tags](#input\_tags) | The tags to assign to the Kubernetes cluster nodes. | `list(string)` | `[]` | no |
 | <a name="input_target_node"></a> [target\_node](#input\_target\_node) | The proxmox target node to deploy the Kubernetes cluster to. | `string` | n/a | yes |
 | <a name="input_vmid"></a> [vmid](#input\_vmid) | The VMID to assign to the Kubernetes master node. | `number` | n/a | yes |
 
