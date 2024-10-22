@@ -196,6 +196,43 @@ module "microk8s_master_node" {
 }
 ````
 
+## Integration with kubernetes provider
+
+````hcl
+terraform {
+  required_version = ">= 1.0.10"
+
+  required_providers {
+    proxmox = {
+      source  = "Telmate/proxmox"
+      version = "3.0.1-rc4"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "2.33.0"
+    }
+  }
+}
+
+provider "proxmox" {}
+
+module "microk8s_master_node" {
+    // put the module configuration here
+}
+
+provider "kubernetes" {
+  host     = module.microk8s_master_node.kubernetes_api_url
+  token    = module.microk8s_master_node.kubernetes_token
+  insecure = true
+}
+
+resource "kubernetes_namespace" "sample" {
+  metadata {
+    name = "my-namespace"
+  }
+}
+````
+
 ## References
 
 - [automated kubernetes proxmox](https://github.com/matthieuml/automated-kubernetes-proxmox/blob/main/proxmox/deploy.sh)
