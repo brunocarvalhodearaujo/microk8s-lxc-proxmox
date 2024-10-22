@@ -136,12 +136,6 @@ resource "null_resource" "mountpoint_permission" {
     }
   }
 
-  lifecycle {
-    replace_triggered_by = [
-      proxmox_lxc.microk8s
-    ]
-  }
-
   depends_on = [
     proxmox_lxc.microk8s
   ]
@@ -166,12 +160,6 @@ resource "null_resource" "argocd_install" {
       private_key = tls_private_key.private_key.private_key_pem
       host        = local.host
     }
-  }
-
-  lifecycle {
-    replace_triggered_by = [
-      proxmox_lxc.microk8s
-    ]
   }
 
   depends_on = [
