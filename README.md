@@ -60,12 +60,12 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_add_node_token"></a> [add\_node\_token](#output\_add\_node\_token) | n/a |
+| <a name="output_add_node_token"></a> [add\_node\_token](#output\_add\_node\_token) | The URL of the Ingress controller |
 | <a name="output_ingress_url"></a> [ingress\_url](#output\_ingress\_url) | The URL of the Ingress controller |
 | <a name="output_ip"></a> [ip](#output\_ip) | The IP address of the Kubernetes node |
 | <a name="output_kubernetes_api_url"></a> [kubernetes\_api\_url](#output\_kubernetes\_api\_url) | The URL of the Ingress controller |
 | <a name="output_kubernetes_token"></a> [kubernetes\_token](#output\_kubernetes\_token) | The URL of the Ingress controller |
-| <a name="output_vmid"></a> [vmid](#output\_vmid) | The VMID of the node |
+| <a name="output_vmid"></a> [vmid](#output\_vmid) | The proxmox VMID of the node |
 
 <!--- END_TF_DOCS --->
 
