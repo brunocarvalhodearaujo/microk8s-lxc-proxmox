@@ -1,4 +1,4 @@
-name: Apply changes to Google Cloud Platform
+name: Update README.md with terraform docs
 
 on:
   push:
