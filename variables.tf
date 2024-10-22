@@ -74,6 +74,12 @@ variable "target_node" {
   type        = string
 }
 
+variable "ostemplate" {
+  description = "The proxmox template to use for the Kubernetes cluster nodes."
+  type        = string
+  default = "local:vztmpl/ubuntu-23.10-standard_23.10-1_amd64.tar.zst"
+}
+
 variable "node_name" {
   description = "The name to assign to the Kubernetes cluster nodes."
   type        = string

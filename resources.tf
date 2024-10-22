@@ -7,7 +7,7 @@ resource "proxmox_lxc" "microk8s" {
   vmid            = var.vmid
   target_node     = var.target_node
   hostname        = "${var.node_name}-${var.vmid}"
-  ostemplate      = "local:vztmpl/ubuntu-23.10-standard_23.10-1_amd64.tar.zst"
+  ostemplate      = var.ostemplate
   unprivileged    = false
   start           = false
   cores           = var.resources.cores
