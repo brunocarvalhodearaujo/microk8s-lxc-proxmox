@@ -75,7 +75,7 @@ No modules.
 
 ````hcl
 module "microk8s_master_node" {
-  source      = "./modules/k8s"
+  source      = "github.com/brunocarvalhodearaujo/microk8s-lxc-proxmox"
   target_node = "b550m"
   vmid        = 402
   node_name   = "microk8s-master"
@@ -122,7 +122,7 @@ resource "tls_private_key" "private_key" {
 }
 
 module "microk8s_worker_node" {
-  source      = "./modules/k8s"
+  source      = "github.com/brunocarvalhodearaujo/microk8s-lxc-proxmox"
   target_node = "b550m"
   vmid        = 403
   node_name   = "microk8s-worker"
@@ -152,7 +152,7 @@ module "microk8s_worker_node" {
 }
 
 module "microk8s_master_node" {
-  source      = "./modules/k8s"
+  source      = "github.com/brunocarvalhodearaujo/microk8s-lxc-proxmox"
   target_node = "b550m"
   vmid        = 402
   node_name   = "microk8s-master"
