@@ -237,6 +237,112 @@ resource "kubernetes_namespace" "sample" {
 }
 ````
 
+## Integration with cloudflare provider
+
+````hcl
+terraform {
+  required_version = ">= 1.0.10"
+
+  required_providers {
+    random = {
+      source  = "hashicorp/random"
+      version = ">= 3.1.0"
+    }
+    proxmox = {
+      source  = "Telmate/proxmox"
+      version = "3.0.1-rc4"
+    }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = ">= 4.44.0"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "2.33.0"
+    }
+  }
+}
+
+provider "proxmox" {}
+
+module "microk8s_master_node" {
+  // put the module configuration here
+}
+
+data "cloudflare_zone" "example" {
+  name = "example.com"
+}
+
+resource "random_password" "tunnel_secret" {
+  length = 64
+}
+
+resource "cloudflare_zero_trust_tunnel_cloudflared" "example" {
+  account_id = var.cloudflare_account_id
+  name       = "example"
+  secret     = base64sha256(random_password.tunnel_secret.result)
+}
+
+resource "cloudflare_record" "microk8s" {
+  zone_id = data.cloudflare_zone.example.id
+  name    = "*"
+  content = cloudflare_zero_trust_tunnel_cloudflared.example.cname
+  type    = "CNAME"
+  proxied = true
+}
+
+resource "cloudflare_zero_trust_tunnel_cloudflared_config" "b550mk_tunnel" {
+  tunnel_id  = cloudflare_zero_trust_tunnel_cloudflared.b550mk.id
+  account_id = var.cloudflare_account_id
+  config {
+    warp_routing {
+      enabled = true
+    }
+
+    ingress_rule {
+      origin_request {
+        http2_origin  = true
+        no_tls_verify = true
+      }
+      hostname = cloudflare_record.example.hostname
+      service  = module.microk8s_master_node.ingress_url
+    }
+
+    ingress_rule {
+      service = "http_status:404"
+    }
+  }
+}
+````
+
+Then you can access the Kubernetes cluster via the cloudflare record `*.example.com` and the argo web interface via the cloudflare record `argocd.example.com`.
+
+Ingress controller is enabled by default, so you can access the services via the cloudflare record `*.example.com`.
+
+````yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-sample-ingress
+  namespace: my-namespace
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+spec:
+  ingressClassName: "nginx"
+  rules:
+    - host: test.example.com
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: sample-service
+                port:
+                  name: http
+````
+
 ## References
 
 - [automated kubernetes proxmox](https://github.com/matthieuml/automated-kubernetes-proxmox/blob/main/proxmox/deploy.sh)
