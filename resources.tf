@@ -86,7 +86,9 @@ resource "proxmox_lxc" "microk8s" {
   # configure microk8s and addons
   provisioner "remote-exec" {
     when   = create
-    inline = [data.template_file.post_create_sh.rendered]
+    inline = [
+      data.template_file.post_create_sh.rendered
+    ]
     connection {
       type        = "ssh"
       user        = "root"
@@ -97,7 +99,9 @@ resource "proxmox_lxc" "microk8s" {
 
   provisioner "remote-exec" {
     when   = create
-    inline = ["microk8s status --wait-ready"]
+    inline = [
+      "microk8s status --wait-ready"
+    ]
     connection {
       type        = "ssh"
       user        = "root"
@@ -149,7 +153,10 @@ resource "null_resource" "argocd_install" {
   }
 
   provisioner "remote-exec" {
-    inline = [data.template_file.argocd_install.rendered]
+    when = create
+    inline = [
+      data.template_file.argocd_install.rendered
+    ]
     connection {
       type        = "ssh"
       user        = "root"
@@ -159,7 +166,9 @@ resource "null_resource" "argocd_install" {
   }
 
   lifecycle {
-    replace_triggered_by = [proxmox_lxc.microk8s]
+    replace_triggered_by = [
+      proxmox_lxc.microk8s
+    ]
   }
 
   depends_on = [
@@ -172,6 +181,7 @@ resource "null_resource" "microk8s_add_node" {
   count = length(var.add_cluster_nodes) > 0 ? 1 : 0
 
   provisioner "remote-exec" {
+    when = create
     inline = [
       for token in var.add_cluster_nodes : <<-EOT
         /snap/bin/${token}
