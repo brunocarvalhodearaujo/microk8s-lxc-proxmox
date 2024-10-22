@@ -26,6 +26,6 @@ output "kubernetes_token" {
 
 output "add_node_token" {
   description = "The URL of the Ingress controller"
-  sensitive = true
-  value     = data.external.microk8s_join_token.result.token
+  sensitive   = true
+  value       = data.external.microk8s_join_token.result.token
 }

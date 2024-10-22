@@ -85,7 +85,7 @@ resource "proxmox_lxc" "microk8s" {
 
   # configure microk8s and addons
   provisioner "remote-exec" {
-    when   = create
+    when = create
     inline = [
       data.template_file.post_create_sh.rendered
     ]
@@ -98,7 +98,7 @@ resource "proxmox_lxc" "microk8s" {
   }
 
   provisioner "remote-exec" {
-    when   = create
+    when = create
     inline = [
       "microk8s status --wait-ready"
     ]
