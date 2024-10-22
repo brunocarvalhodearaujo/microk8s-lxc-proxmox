@@ -137,7 +137,9 @@ resource "null_resource" "mountpoint_permission" {
   }
 
   lifecycle {
-    replace_triggered_by = [proxmox_lxc.microk8s]
+    replace_triggered_by = [
+      proxmox_lxc.microk8s
+    ]
   }
 
   depends_on = [
