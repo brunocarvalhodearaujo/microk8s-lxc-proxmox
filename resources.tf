@@ -74,6 +74,7 @@ resource "proxmox_lxc" "microk8s" {
       "pct exec ${var.vmid} -- bash -c '${data.template_file.rc_local_sh.rendered}'",
       "pct stop ${var.vmid}",
       "pct start ${var.vmid}",
+      "pct exec ${var.vmid} -- bash -c '${data.template_file.post_create_sh.rendered}'"
     ]
 
     connection {
@@ -81,33 +82,6 @@ resource "proxmox_lxc" "microk8s" {
       user     = var.proxmox_ssh.username
       password = var.proxmox_ssh.password
       host     = var.proxmox_ssh.host
-    }
-  }
-
-  # configure microk8s and addons
-  provisioner "remote-exec" {
-    when = create
-    inline = [
-      data.template_file.post_create_sh.rendered
-    ]
-    connection {
-      type        = "ssh"
-      user        = "root"
-      private_key = tls_private_key.private_key.private_key_pem
-      host        = local.host
-    }
-  }
-
-  provisioner "remote-exec" {
-    when = create
-    inline = [
-      "microk8s status --wait-ready"
-    ]
-    connection {
-      type        = "ssh"
-      user        = "root"
-      private_key = tls_private_key.private_key.private_key_pem
-      host        = local.host
     }
   }
 }

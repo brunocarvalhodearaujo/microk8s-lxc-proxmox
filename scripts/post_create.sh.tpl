@@ -25,3 +25,4 @@ snap alias microk8s.helm3 helm
 snap alias microk8s.kubectl kubectl
 microk8s enable ingress
 sleep 60
+microk8s status --wait-ready
