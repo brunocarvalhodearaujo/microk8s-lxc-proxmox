@@ -5,7 +5,6 @@ printf "🛠️ Installing and configure ArgoCD\n"
 kubectl delete namespace argocd || true
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 
 if [ "${argocd_ingress_host}" != "" ]; then
   kubectl apply -n argocd -f - <<EOF
@@ -26,7 +25,8 @@ metadata:
   namespace: argocd
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: "nginx"
   rules:
