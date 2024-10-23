@@ -13,7 +13,7 @@ data "template_file" "argocd_install" {
   template = file("${path.module}/scripts/argocd_install.sh.tpl")
   vars = {
     argocd_admin_password = var.cluster_addons.argocd.admin_password
-    argocd_ingress_host   = var.cluster_addons.argocd.enabled ? var.cluster_addons.argocd.ingress_host : ""
+    argocd_ingress_host   = var.cluster_addons.argocd.ingress_host
   }
 }
 
