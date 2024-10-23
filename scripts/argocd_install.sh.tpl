@@ -38,7 +38,7 @@ spec:
               service:
                 name: argocd-server
                 port:
-                  name: http
+                  name: https
 EOF
 fi
 
