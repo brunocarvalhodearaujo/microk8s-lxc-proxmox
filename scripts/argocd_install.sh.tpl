@@ -24,9 +24,8 @@ metadata:
   name: argocd-server-http-ingress
   namespace: argocd
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
 spec:
   ingressClassName: "nginx"
   rules:
@@ -39,11 +38,9 @@ spec:
               service:
                 name: argocd-server
                 port:
-                  name: https
+                  name: http
 EOF
 fi
-
-sleep 60
 
 kubectl patch secret -n argocd argocd-secret \
   -p '{"stringData": { "admin.password": "'$(htpasswd -bnBC 10 "" ${argocd_admin_password} | tr -d ':\n')'"}}'
