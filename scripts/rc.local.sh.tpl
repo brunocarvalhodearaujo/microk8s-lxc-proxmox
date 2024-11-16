@@ -7,8 +7,11 @@ cat > /etc/rc.local <<EOF
 if [ ! -L /dev/kmsg ]; then
   ln -s /dev/console /dev/kmsg
   apparmor_parser -r /var/lib/snapd/apparmor/profiles/*
-  microk8s stop
-  microk8s start
+fi
+
+if [ -x /snap/bin/microk8s ]; then
+  /snap/bin/microk8s.stop
+  /snap/bin/microk8s.start
 fi
 EOF
 
