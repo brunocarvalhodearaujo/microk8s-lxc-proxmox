@@ -9,7 +9,7 @@ if ! [ -f /dev/kmsg ]; then
   apparmor_parser -r /var/lib/snapd/apparmor/profiles/*
 fi
 
-if ! [ -f /snap/bin/microk8s ]; then
+if ! [ -x "$(command -v microk8s)" ]; then
   microk8s stop
   microk8s start
 fi
