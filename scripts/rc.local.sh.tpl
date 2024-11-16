@@ -8,11 +8,6 @@ if ! [ -f /dev/kmsg ]; then
   ln -s /dev/console /dev/kmsg
   apparmor_parser -r /var/lib/snapd/apparmor/profiles/*
 fi
-
-if ! [ -x "$(command -v microk8s)" ]; then
-  microk8s stop
-  microk8s start
-fi
 EOF
 
 chmod +x /etc/rc.local
