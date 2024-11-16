@@ -87,9 +87,7 @@ resource "proxmox_lxc" "microk8s" {
   # configure microk8s and addons
   provisioner "remote-exec" {
     when = create
-    inline = [
-      data.template_file.post_create_sh.rendered
-    ]
+    inline = [data.template_file.post_create_sh.rendered]
     connection {
       type        = "ssh"
       user        = "root"

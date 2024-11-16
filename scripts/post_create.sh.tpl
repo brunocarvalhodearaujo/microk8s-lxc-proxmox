@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
 apt update
-apt upgrade -y
 
-printf "🛠️ Installing Linux dependencies\n"
 apt install -y \
   ca-certificates \
   curl \
@@ -17,8 +15,6 @@ apt install -y \
   fuse \
   apache2-utils \
   snapd
-
-printf "🛠️ Installing and configure microk8s\n"
 
 snap install microk8s --classic
 snap alias microk8s.helm3 helm
