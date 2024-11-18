@@ -6,7 +6,7 @@ resource "tls_private_key" "private_key" {
 resource "proxmox_lxc" "microk8s" {
   vmid            = var.vmid
   target_node     = var.target_node
-  hostname        = "${var.node_name}-${var.vmid}"
+  hostname        = var.node_name
   ostemplate      = var.ostemplate
   unprivileged    = false
   start           = false
@@ -87,7 +87,9 @@ resource "proxmox_lxc" "microk8s" {
   # configure microk8s and addons
   provisioner "remote-exec" {
     when = create
-    inline = [data.template_file.post_create_sh.rendered]
+    inline = [
+      data.template_file.post_create_sh.rendered
+    ]
     connection {
       type        = "ssh"
       user        = "root"
@@ -136,7 +138,9 @@ resource "null_resource" "argocd_install" {
 
   provisioner "remote-exec" {
     when = create
-    inline = [data.template_file.argocd_install.rendered]
+    inline = [
+      data.template_file.argocd_install.rendered
+    ]
     connection {
       type        = "ssh"
       user        = "root"

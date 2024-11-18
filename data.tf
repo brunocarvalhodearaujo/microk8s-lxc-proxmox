@@ -26,7 +26,10 @@ data "template_file" "master_node_join" {
 }
 
 data "external" "microk8s_api_token" {
-  program = ["bash", "${path.module}/scripts/generate-k8s-token.sh"]
+  program = [
+    "bash",
+    "${path.module}/scripts/generate-k8s-token.sh"
+  ]
   query = {
     user        = "root"
     private_key = tls_private_key.private_key.private_key_pem
@@ -38,7 +41,10 @@ data "external" "microk8s_api_token" {
 }
 
 data "external" "microk8s_join_token" {
-  program = ["bash", "${path.module}/scripts/join-k8s-token.sh"]
+  program = [
+    "bash",
+    "${path.module}/scripts/join-k8s-token.sh"
+  ]
   query = {
     user        = "root"
     private_key = tls_private_key.private_key.private_key_pem
