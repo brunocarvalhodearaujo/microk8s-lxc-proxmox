@@ -136,9 +136,7 @@ resource "null_resource" "argocd_install" {
 
   provisioner "remote-exec" {
     when = create
-    inline = [
-      data.template_file.argocd_install.rendered
-    ]
+    inline = [data.template_file.argocd_install.rendered]
     connection {
       type        = "ssh"
       user        = "root"
@@ -148,8 +146,7 @@ resource "null_resource" "argocd_install" {
   }
 
   depends_on = [
-    proxmox_lxc.microk8s,
-    null_resource.mountpoint_permission
+    proxmox_lxc.microk8s
   ]
 }
 
@@ -172,7 +169,6 @@ resource "null_resource" "microk8s_add_node" {
   }
 
   depends_on = [
-    proxmox_lxc.microk8s,
-    null_resource.argocd_install
+    proxmox_lxc.microk8s
   ]
 }
