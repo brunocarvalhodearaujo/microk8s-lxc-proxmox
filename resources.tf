@@ -129,12 +129,7 @@ resource "null_resource" "mountpoint_permission" {
 }
 
 resource "null_resource" "argocd_install" {
-  count = var.cluster_addons.argocd.enabled ? 1 : 0
-
-  triggers = {
-    hash = md5(data.template_file.argocd_install.rendered),
-    host = local.host
-  }
+  count = (var.cluster_addons.argocd.enabled) ? 1 : 0
 
   provisioner "remote-exec" {
     when = create
